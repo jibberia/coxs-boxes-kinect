@@ -13,15 +13,15 @@ public class BodyView : MonoBehaviour
     
     private Dictionary<Kinect.JointType, Kinect.JointType> jointMap = new Dictionary<Kinect.JointType, Kinect.JointType>()
     {
-        // { Kinect.JointType.FootLeft, Kinect.JointType.AnkleLeft },
-        // { Kinect.JointType.AnkleLeft, Kinect.JointType.KneeLeft },
-        // { Kinect.JointType.KneeLeft, Kinect.JointType.HipLeft },
-        // { Kinect.JointType.HipLeft, Kinect.JointType.SpineBase },
+         { Kinect.JointType.FootLeft, Kinect.JointType.AnkleLeft },
+         { Kinect.JointType.AnkleLeft, Kinect.JointType.KneeLeft },
+         { Kinect.JointType.KneeLeft, Kinect.JointType.HipLeft },
+         { Kinect.JointType.HipLeft, Kinect.JointType.SpineBase },
         
-        // { Kinect.JointType.FootRight, Kinect.JointType.AnkleRight },
-        // { Kinect.JointType.AnkleRight, Kinect.JointType.KneeRight },
-        // { Kinect.JointType.KneeRight, Kinect.JointType.HipRight },
-        // { Kinect.JointType.HipRight, Kinect.JointType.SpineBase },
+         { Kinect.JointType.FootRight, Kinect.JointType.AnkleRight },
+         { Kinect.JointType.AnkleRight, Kinect.JointType.KneeRight },
+         { Kinect.JointType.KneeRight, Kinect.JointType.HipRight },
+         { Kinect.JointType.HipRight, Kinect.JointType.SpineBase },
         
         { Kinect.JointType.HandTipLeft, Kinect.JointType.HandLeft },
         { Kinect.JointType.ThumbLeft, Kinect.JointType.HandLeft },
@@ -37,8 +37,8 @@ public class BodyView : MonoBehaviour
         { Kinect.JointType.ElbowRight, Kinect.JointType.ShoulderRight },
         { Kinect.JointType.ShoulderRight, Kinect.JointType.SpineShoulder },
         
-        // { Kinect.JointType.SpineBase, Kinect.JointType.SpineMid },
-        // { Kinect.JointType.SpineMid, Kinect.JointType.SpineShoulder },
+         { Kinect.JointType.SpineBase, Kinect.JointType.SpineMid },
+         { Kinect.JointType.SpineMid, Kinect.JointType.SpineShoulder },
         { Kinect.JointType.SpineShoulder, Kinect.JointType.Neck },
         { Kinect.JointType.Neck, Kinect.JointType.Head },
 
@@ -128,11 +128,11 @@ public class BodyView : MonoBehaviour
             jointTransforms[jt] = jointObj.transform;
 
             if (jointMap[jt] != jt) { // skip head
-                GameObject bone = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                GameObject bone = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
 
                 rb = bone.AddComponent<Rigidbody>();
                 rb.isKinematic = true;
-                rb.mass = 5;
+                rb.mass = 15;
                 
                 mr = bone.GetComponent<MeshRenderer>();
                 mr.material = bodyMaterial;
@@ -189,6 +189,6 @@ public class BodyView : MonoBehaviour
 
 		bone.localPosition = midpoint;
 		bone.up = offset;
-		bone.localScale = new Vector3(width, offset.magnitude / 2f, width);
+		bone.localScale = new Vector3(width, offset.magnitude/2f, width);
 	}
 }

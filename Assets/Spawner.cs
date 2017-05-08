@@ -34,7 +34,7 @@ public class Spawner : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		foreach (var go in objects) {
-            if (go.transform.position.y < -20) {
+            if (go.transform.position.y < 0) {
                 SetInitialPosition(go);
             }
         }
@@ -68,8 +68,10 @@ public class Spawner : MonoBehaviour {
         */
         // go.transform.SetParent(this.transform, false);
 
-        go.GetComponent<Rigidbody>().velocity = Vector3.zero;
-        
+        Rigidbody rb = go.GetComponent<Rigidbody>();
+        rb.velocity = Vector3.zero;
+       rb.constraints = RigidbodyConstraints.FreezePositionZ;
+
         go.SetActive(true);
 //        print(go.transform.lossyScale);
     }
