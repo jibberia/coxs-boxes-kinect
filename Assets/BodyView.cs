@@ -90,7 +90,7 @@ public class BodyView : MonoBehaviour
         }
     }
 
-    void LateUpdate()
+    void LateUpdate() // unnecessary
     {
         foreach (Kinect.JointType jt in jointMap.Keys) {
             if (jt == jointMap[jt]) continue;
