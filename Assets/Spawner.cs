@@ -6,6 +6,7 @@ public class Spawner : MonoBehaviour {
 
     //public GameObject prefab;
     public GameObject[] prefabs;
+    public Transform parentTransform;
 
     public int num = 10;
     public float minimumScale = .1f, maximumScale = .6f;
@@ -26,6 +27,8 @@ public class Spawner : MonoBehaviour {
             SetInitialPosition(go);
             objects.Add(go);
         }
+
+        GetComponent<MeshRenderer>().enabled = false;
 	}
 	
 	// Update is called once per frame
@@ -39,24 +42,36 @@ public class Spawner : MonoBehaviour {
 
     void SetInitialPosition(GameObject go)
     {
-        go.transform.parent = this.transform;
+        // go.transform.parent = this.transform;
+        go.transform.SetParent(parentTransform, false);
+
+        Vector3 ls = this.transform.localScale;
 
         go.transform.rotation = Quaternion.identity;
-        go.transform.position = new Vector3(
-            Random.Range(-1.5f, 1.5f),
-            Random.Range(2, 4),
-            Random.Range(-1.5f, 1.5f));
+        Vector3 randPos = new Vector3(
+            Random.Range(-ls.x/2f, ls.x/2f),
+            Random.Range(-ls.y/2f, ls.y/2f),
+            Random.Range(-ls.z/2f, ls.z/2f));
+        go.transform.position = this.transform.position + randPos;
         float s = Random.Range(minimumScale, maximumScale);
-        go.transform.localScale = new Vector3(s, s, s);
+        Vector3 worldNormalizedScale = new Vector3(
+            s / ls.x,
+            s / ls.x,
+            s / ls.x);
+            //(s / ls.x) * (ls.x / ls.z));
+        go.transform.localScale = Vector3.one * s;//worldNormalizedScale;//new Vector3(s, s, s);
         /*
         go.transform.localScale = new Vector3(
             Random.Range(minimumScale, maximumScale),
             Random.Range(minimumScale, maximumScale),
             Random.Range(minimumScale, maximumScale));
         */
+        // go.transform.SetParent(this.transform, false);
+
         go.GetComponent<Rigidbody>().velocity = Vector3.zero;
         
         go.SetActive(true);
+//        print(go.transform.lossyScale);
     }
 
     private GameObject RandomPrefab()
