@@ -46,8 +46,12 @@ public class BodyView : MonoBehaviour
     };
 
     // private List<GameObject> bones = new List<GameObject>();
-    private Dictionary<Kinect.JointType, Transform> jointTransforms = new Dictionary<Kinect.JointType, Transform>();
-    private Dictionary<Kinect.JointType, GameObject> bones = new Dictionary<Kinect.JointType, GameObject>();
+    // private Dictionary<Kinect.JointType, Transform> jointTransforms = new Dictionary<Kinect.JointType, Transform>();
+    private Dictionary<ulong, Dictionary<Kinect.JointType, Transform>> bodyJointTransforms =
+        new Dictionary<ulong, Dictionary<Kinect.JointType, Transform>>();
+    // private Dictionary<Kinect.JointType, GameObject> bones = new Dictionary<Kinect.JointType, GameObject>();
+    private Dictionary<ulong, Dictionary<Kinect.JointType, GameObject>> bodyBones =
+        new Dictionary<ulong, Dictionary<Kinect.JointType, GameObject>>();
 
     void Update () 
     {
@@ -74,6 +78,8 @@ public class BodyView : MonoBehaviour
             if (!trackedIds.Contains(trackingId)) {
                 Destroy(_Bodies[trackingId]);
                 _Bodies.Remove(trackingId);
+                bodyBones.Remove(trackingId);
+                bodyJointTransforms.Remove(trackingId);
             }
         }
 
@@ -86,11 +92,12 @@ public class BodyView : MonoBehaviour
                 }
                 
                 RefreshBodyObject(body, _Bodies[body.TrackingId]);
+                RefreshBones(bodyBones[body.TrackingId], bodyJointTransforms[body.TrackingId]);
             }
         }
     }
 
-    void LateUpdate() // unnecessary
+    void RefreshBones(Dictionary<Kinect.JointType, GameObject> bones, Dictionary<Kinect.JointType, Transform> jointTransforms)
     {
         foreach (Kinect.JointType jt in jointMap.Keys) {
             if (jt == jointMap[jt]) continue;
@@ -112,6 +119,8 @@ public class BodyView : MonoBehaviour
         Rigidbody rb;
 //        for (Kinect.JointType jt = Kinect.JointType.SpineBase; jt <= Kinect.JointType.ThumbRight; jt++) {
         foreach (Kinect.JointType jt in jointMap.Keys) {
+            if (!bodyJointTransforms.ContainsKey(id)) bodyJointTransforms[id] = new Dictionary<Kinect.JointType, Transform>();
+            if (!bodyBones.ContainsKey(id)) bodyBones[id] = new Dictionary<Kinect.JointType, GameObject>();
             GameObject jointObj = GameObject.CreatePrimitive(PrimitiveType.Cube);
 
             rb = jointObj.AddComponent<Rigidbody>();
@@ -125,7 +134,7 @@ public class BodyView : MonoBehaviour
             jointObj.name = jt.ToString();
             jointObj.transform.parent = body.transform;
             jointObj.transform.localScale = new Vector3(jointScale, jointScale, jointScale);// * 60f);
-            jointTransforms[jt] = jointObj.transform;
+            bodyJointTransforms[id][jt] = jointObj.transform;
 
             if (jointMap[jt] != jt) { // skip head
                 GameObject bone = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
@@ -140,7 +149,7 @@ public class BodyView : MonoBehaviour
 
                 bone.name = "Bone<" + jt.ToString() + "," + jointMap[jt].ToString() + ">";
                 bone.transform.parent = body.transform;
-                bones[jt] = bone;
+                bodyBones[id][jt] = bone;
             }
         }
 
