@@ -108,10 +108,13 @@ public class BodyView : MonoBehaviour
             bone.transform.parent = null;
             SetPositionBetween(bone.transform, jointTransforms[jt].localPosition, jointTransforms[jointMap[jt]].localPosition);
             bone.transform.SetParent(tempParent, false);
+            bone.GetComponent<MeshRenderer>().enabled = renderSkeleton;
         }
     }
     
     public float jointScale = 0.3f;
+    public bool renderSkeleton = true;
+    public bool renderJoints = true;
     private GameObject CreateBodyObject(ulong id)
     {
         GameObject body = new GameObject("Body:" + id);
@@ -129,7 +132,7 @@ public class BodyView : MonoBehaviour
 
             mr = jointObj.GetComponent<MeshRenderer>();
             mr.material = bodyMaterial;
-            mr.enabled = true;
+            mr.enabled = renderJoints;
 
             jointObj.name = jt.ToString();
             jointObj.transform.parent = body.transform;
@@ -145,7 +148,7 @@ public class BodyView : MonoBehaviour
                 
                 mr = bone.GetComponent<MeshRenderer>();
                 mr.material = bodyMaterial;
-                mr.enabled = true;
+                mr.enabled = renderSkeleton;
 
                 bone.name = "Bone<" + jt.ToString() + "," + jointMap[jt].ToString() + ">";
                 bone.transform.parent = body.transform;
@@ -171,6 +174,7 @@ public class BodyView : MonoBehaviour
             // }
             
             Transform jointObj = bodyObject.transform.FindChild(jt.ToString());
+            jointObj.gameObject.GetComponent<Renderer>().enabled = renderJoints;
             jointObj.localPosition = GetVector3FromJoint(sourceJoint);
 
             // if (jt != jointMap[jt]) { // skip head
