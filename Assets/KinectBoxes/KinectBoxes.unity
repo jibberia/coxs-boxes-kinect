@@ -1093,6 +1093,8 @@ MonoBehaviour:
   bodyMaterial: {fileID: 2100000, guid: 4bf00783a3053e84fb019e42b63ecc97, type: 2}
   BodySourceManager: {fileID: 1984670757}
   jointScale: 0.06
+  renderSkeleton: 1
+  renderJoints: 0
   vectorScale: 1
   width: 0.1
 --- !u!1 &1919434925
