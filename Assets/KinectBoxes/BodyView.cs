@@ -140,7 +140,7 @@ public class BodyView : MonoBehaviour
             bodyJointTransforms[id][jt] = jointObj.transform;
 
             if (jointMap[jt] != jt) { // skip head
-                GameObject bone = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+                GameObject bone = GameObject.CreatePrimitive(PrimitiveType.Capsule);//Cylinder);
 
                 rb = bone.AddComponent<Rigidbody>();
                 rb.isKinematic = true;
@@ -204,4 +204,6 @@ public class BodyView : MonoBehaviour
 		bone.up = offset;
 		bone.localScale = new Vector3(width, offset.magnitude/2f, width);
 	}
+
+    public IEnumerable<GameObject> Bodies { get { return _Bodies.Values; } }
 }
