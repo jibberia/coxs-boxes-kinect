@@ -53,6 +53,22 @@ public class RoomFitter : MonoBehaviour {
 	public void TrimRoom() {
 		Debug.Log("trimming room...");
 		float back = backWall.position.z;
-		// leftWall.transform.localScale
+		Vector3 scale;
+
+		scale = leftWall.transform.localScale;
+		scale.x = Mathf.Abs((back / 10f) * 2f);
+		scale.z += Mathf.Abs(floor.transform.position.y) * 2f;
+		leftWall.transform.localScale = scale;
+
+		scale = rightWall.transform.localScale;
+		scale.x = Mathf.Abs((back / 10f) * 2f);
+		scale.z += Mathf.Abs(floor.transform.position.y) * 2f;
+		rightWall.transform.localScale = scale;
+
+		scale = floor.transform.localScale;
+		scale.x = Mathf.Abs((leftWall.transform.position.x / 10f) * 2f);
+		scale.z = Mathf.Abs((back / 10f) * 2f);
+		floor.transform.localScale = scale;
+
 	}
 }
